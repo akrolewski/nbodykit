@@ -568,12 +568,19 @@ def project_to_basis(y3d, edges, los=[0, 0, 1], poles=[]):
     """
     comm = y3d.pm.comm
     x3d = y3d.x
-    hermitian_symmetric = False
-
+    hermitian_symmetric = numpy.iscomplexobj(y3d)
+    
     from scipy.special import legendre
 
     # setup the bin edges and number of bins
     xedges, muedges = edges
+    
+    if hermitian_symmetric:
+        muedges = numpy.linspace(0, 1, 2, endpoint=True)
+    else:
+        muedges = numpy.linspace(-1, 1, 2, endpoint=True)
+
+    
     x2edges = xedges**2
     Nx = len(xedges) - 1
     Nmu = len(muedges) - 1
